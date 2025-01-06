@@ -2,39 +2,17 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 import FormDialog from './formDialogs';
-import { useState } from 'react';
-
-const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'name' },
-    {
-        field: 'actions',
-        headerName: 'Actions',
-        type: 'actions',
-        width: 180,
-        cellClassName: 'actions',
-        getActions: ({ id }) => {
-            return [<Button variant="outlined" size='small' >Update</Button>, <Button variant="outlined" color="error" size='small'>Delete</Button>]
-        }
-    },
-];
-
-const rows = [
-    { id: 1, lastName: 'Snow', name: 'Jon', age: 35 },
-    { id: 2, lastName: 'Lannister', name: 'Cersei', age: 42 },
-    { id: 3, lastName: 'Lannister', name: 'Jaime', age: 45 },
-    { id: 4, lastName: 'Stark', name: 'Arya', age: 16 },
-    { id: 5, lastName: 'Targaryen', name: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', name: null, age: 150 },
-    { id: 7, lastName: 'Clifford', name: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', name: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', name: 'Harvey', age: 65 },
-];
+import { useEffect, useState } from 'react';
+import { get } from '../../http';
 
 const paginationModel = { page: 0, pageSize: 5 };
 
 const SongTypePage = () => {
     const [open, setOpen] = useState(false);
+    const [songTypes, setSongTypes] = useState([]);
+    const [songType, setSongType] = useState({});
+
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -43,6 +21,42 @@ const SongTypePage = () => {
     const handleClose = () => {
         setOpen(false);
     }
+
+    const getSongTypes = async () => {
+        const songTypes: any = await get('/song_type');
+        setSongTypes(songTypes.data);
+    }
+
+    const deleteSongType = async (id: number) => {
+        const res = await get('/song_type/delete/' + id);
+        console.log(res);
+        getSongTypes();
+    }
+
+    useEffect(() => {
+        getSongTypes();
+    }, []);
+
+    const columns: GridColDef[] = [
+        { field: 'id', headerName: 'ID', width: 70 },
+        { field: 'name', headerName: 'name' },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            type: 'actions',
+            width: 180,
+            cellClassName: 'actions',
+            getActions: ({ id, row, columns }) => {
+                return [<Button variant="outlined" size='small' onClick={() => {
+                    setSongType(row);
+                    setOpen(true);
+                }} >Update</Button>, <Button variant="outlined" color="error" size='small' onClick={() => {
+                    deleteSongType(row.id);
+                }}>Delete</Button>]
+            }
+        },
+    ];
+
     return (
         <div>
             <h1>Song Type Page</h1>
@@ -50,7 +64,7 @@ const SongTypePage = () => {
                 <Button variant="outlined" size='small' onClick={handleClickOpen} >New song type</Button>
                 <Paper sx={{ height: 600, width: '100%', marginTop: '10px' }}>
                     <DataGrid
-                        rows={rows}
+                        rows={songTypes}
                         columns={columns}
                         initialState={{ pagination: { paginationModel } }}
                         pageSizeOptions={[5, 10]}

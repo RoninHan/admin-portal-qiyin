@@ -7,18 +7,23 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { post } from '../../http';
 
 interface FormDialogProps {
     mode: boolean;
     onClose?: () => void;
+    formData?: any;
 }
 
 export default function FormDialog(props: FormDialogProps) {
-    const { mode, onClose } = props;
-    const [open, setOpen] = React.useState(mode);
+    const { mode, onClose, formData } = props;
+    const [open, setOpen] = React.useState(false);
     const [age, setAge] = React.useState('');
+    const [form, setForm] = React.useState<any>({});
+
     React.useEffect(() => {
         setOpen(mode);
+        setForm(formData);
     }, [mode]);
 
     const handleClose = () => {
@@ -29,6 +34,32 @@ export default function FormDialog(props: FormDialogProps) {
         setAge(event.target.value);
     };
 
+    const handleSave = (formData: any) => {
+        if (form.id) {
+            let res: any = post('/song/update/' + form.id, formData);
+            if (res.status === 'success') {
+                let form = {
+                    song_id: res.data.id,
+                    lyric: formData.lyric
+                }
+                let reslyrics = post('/lyrics/update/' + res.data.id, form);
+                console.log(res);
+            }
+            handleClose();
+        } else {
+            let res: any = post('/song/new', formData);
+            if (res.status === 'success') {
+                let form = {
+                    song_id: res.data.id,
+                    lyric: formData.lyric
+                }
+                let reslyrics = post('/lyrics/new', form);
+                console.log(reslyrics);
+            }
+            console.log(res);
+            handleClose();
+        }
+    }
 
     return (
         <React.Fragment>
@@ -41,9 +72,7 @@ export default function FormDialog(props: FormDialogProps) {
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries((formData as any).entries());
-                        const email = formJson.email;
-                        console.log(email);
-                        handleClose();
+                        handleSave(formJson);
                     },
                 }}
             >

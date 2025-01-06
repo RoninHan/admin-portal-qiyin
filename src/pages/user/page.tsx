@@ -1,6 +1,9 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 
+import { get } from '../../http';
+import { useEffect, useState } from 'react';
+
 const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'firstName', headerName: 'First name', width: 130 },
@@ -36,12 +39,23 @@ const rows = [
 const paginationModel = { page: 0, pageSize: 5 };
 
 const UserPage = () => {
+    const [users, setUsers] = useState([]);
+
+    const getUsers = async () => {
+        const users: any = await get('/users');
+        setUsers(users.data);
+    }
+
+    useEffect(() => {
+        getUsers();
+    }, []);
+
     return (
         <div>
             <h1>User Page</h1>
             <Paper sx={{ height: 400, width: '100%' }}>
                 <DataGrid
-                    rows={rows}
+                    rows={users}
                     columns={columns}
                     initialState={{ pagination: { paginationModel } }}
                     pageSizeOptions={[5, 10]}
