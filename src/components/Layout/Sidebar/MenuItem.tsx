@@ -11,18 +11,25 @@ interface MenuItemProps {
 
 export const MenuItem: React.FC<MenuItemProps> = ({ path, icon, label, isOpen }) => {
   const item = (
-    <ListItem
-      component={NavLink}
-      to={path}
-      className={({ isActive }) => 
-        `hover:bg-gray-100 dark:hover:bg-gray-700 ${
-          isActive ? 'bg-gray-100 dark:bg-gray-700' : ''
-        }`
+    <NavLink to={path} className={({ isActive }) =>
+      `hover:bg-[#7fbefc]  dark:hover:bg-gray-700 ${isActive ? 'bg-[#449ffa] dark:bg-gray-700' : ''
+      }`
+    }>
+      {
+        ({ isActive }) => (
+          <ListItem
+            component={NavLink}
+            to={path}
+            className={`hover:bg-[#7fbefc]  dark:hover:bg-gray-700 ${isActive ? 'bg-[#449ffa] dark:bg-gray-700' : ''
+              }`}
+          >
+            <ListItemIcon >{icon}</ListItemIcon>
+            {isOpen && <ListItemText primary={label} />}
+          </ListItem>
+        )
       }
-    >
-      <ListItemIcon>{icon}</ListItemIcon>
-      {isOpen && <ListItemText primary={label} />}
-    </ListItem>
+    </NavLink>
+
   );
 
   return isOpen ? item : (

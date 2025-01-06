@@ -4,6 +4,10 @@ import { observer } from 'mobx-react-lite';
 import { MainLayout } from './components/Layout/MainLayout';
 import { Login } from './pages/Login';
 import { authStore } from './stores/authStore';
+import UserPage from './pages/user/page';
+import SongTypePage from './pages/songType/page';
+import SettingPage from './pages/setting/page';
+import SongPage from './pages/song/page';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   if (!authStore.isAuthenticated) {
@@ -37,21 +41,20 @@ const App = observer(() => {
           />
           <Route
             path="users"
-            element={
-              <div className="p-4">
-                <h1 className="text-2xl font-bold">Users</h1>
-                <p>User management page</p>
-              </div>
-            }
+            element={<UserPage />}
+          />
+
+          <Route
+            path="songType"
+            element={<SongTypePage />}
+          />
+          <Route
+            path="song"
+            element={<SongPage />}
           />
           <Route
             path="settings"
-            element={
-              <div className="p-4">
-                <h1 className="text-2xl font-bold">Settings</h1>
-                <p>Application settings</p>
-              </div>
-            }
+            element={<SettingPage />}
           />
         </Route>
       </Routes>

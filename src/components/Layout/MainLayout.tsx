@@ -27,15 +27,13 @@ export const MainLayout = observer(() => {
       <CssBaseline />
       <Box className="flex h-screen">
         <Header onToggleSidebar={handleToggleSidebar} />
-        <Sidebar 
-          open={sidebarOpen} 
-          onToggle={handleToggleSidebar} 
+        <Sidebar
+          open={sidebarOpen}
+          onToggle={handleToggleSidebar}
         />
         <Box
           component="main"
-          className={`flex-grow p-6 mt-16 transition-all duration-300 ${
-            sidebarOpen ? 'ml-64' : 'ml-20'
-          }`}
+          className={`flex-grow p-6 mt-16 transition-all duration-300 `}
         >
           <Outlet />
         </Box>
