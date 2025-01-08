@@ -15,13 +15,13 @@ const SongPsinger = () => {
     const [songPsinger, setSongPsinger] = useState({});
 
     const getSongPsingers = async () => {
-        const songPsingers: any = await get('/song');
+        const songPsingers: any = await get('/api/song');
         setSongPsingers(songPsingers.data);
     }
 
     const deleteSongPsinger = async (id: number) => {
-        const res = await get('/song/delete/' + id);
-        const reslyrics = await get('/lyrics/delete/' + id);
+        const res = await get('/api/song/delete/' + id);
+        const reslyrics = await get('/api/lyrics/delete/' + id);
         console.log(res);
         console.log(reslyrics);
         getSongPsingers();
@@ -33,9 +33,13 @@ const SongPsinger = () => {
 
     const handleClickOpen = () => {
         setOpen(true);
+        setSongPsinger({
+            song_type_id: "",
+        });
     }
     const handleClose = () => {
         setOpen(false);
+        getSongPsingers();
     }
 
     const columns: GridColDef[] = [

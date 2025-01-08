@@ -32,11 +32,11 @@ export default function FormDialog(props: FormDialogProps) {
 
     const handleSave = (formData: any) => {
         if (form.id) {
-            let res = post('/song_type/update/' + form.id, formData);
+            let res = post('/api/song_type/update/' + form.id, formData);
             console.log(res);
             handleClose();
         } else {
-            let res = post('/song_type/new', formData);
+            let res = post('/api/song_type/new', formData);
             console.log(res);
             handleClose();
         }

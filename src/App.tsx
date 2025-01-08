@@ -20,7 +20,7 @@ const App = observer(() => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
+
         <Route
           path="/"
           element={
@@ -57,6 +57,7 @@ const App = observer(() => {
             element={<SettingPage />}
           />
         </Route>
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );

@@ -15,20 +15,22 @@ const SongTypePage = () => {
 
 
     const handleClickOpen = () => {
+        setSongType({});
         setOpen(true);
     }
 
     const handleClose = () => {
         setOpen(false);
+        getSongTypes();
     }
 
     const getSongTypes = async () => {
-        const songTypes: any = await get('/song_type');
+        const songTypes: any = await get('/api/song_type');
         setSongTypes(songTypes.data);
     }
 
     const deleteSongType = async (id: number) => {
-        const res = await get('/song_type/delete/' + id);
+        const res = await get('/api/song_type/delete/' + id);
         console.log(res);
         getSongTypes();
     }
@@ -73,7 +75,7 @@ const SongTypePage = () => {
                     />
                 </Paper>
             </div>
-            <FormDialog mode={open} onClose={handleClose} />
+            <FormDialog mode={open} onClose={handleClose} formData={songType} />
         </div>
     );
 }

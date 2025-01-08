@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { post } from '../../http';
+import { get, post } from '../../http';
 
 interface FormDialogProps {
     mode: boolean;
@@ -20,10 +20,14 @@ export default function FormDialog(props: FormDialogProps) {
     const [open, setOpen] = React.useState(false);
     const [age, setAge] = React.useState('');
     const [form, setForm] = React.useState<any>({});
+    const [songTypes, setSongTypes] = React.useState([]);
 
     React.useEffect(() => {
         setOpen(mode);
         setForm(formData);
+        if (mode) {
+            getSongTypes();
+        }
     }, [mode]);
 
     const handleClose = () => {
@@ -34,31 +38,40 @@ export default function FormDialog(props: FormDialogProps) {
         setAge(event.target.value);
     };
 
-    const handleSave = (formData: any) => {
+    const handleSave = async (formData: any) => {
         if (form.id) {
-            let res: any = post('/song/update/' + form.id, formData);
-            if (res.status === 'success') {
+            let res: any = await post('/api/song/update/' + form.id, formData);
+            console.log(res);
+            if (res.status === "Success") {
+                console.log(123)
                 let form = {
                     song_id: res.data.id,
                     lyric: formData.lyric
                 }
-                let reslyrics = post('/lyrics/update/' + res.data.id, form);
-                console.log(res);
+                let reslyrics = await post('/api/lyrics/update/' + res.data.id, form);
+                console.log(reslyrics);
             }
             handleClose();
         } else {
-            let res: any = post('/song/new', formData);
-            if (res.status === 'success') {
+            let res: any = await post('/api/song/new', formData);
+            debugger
+            if (res.status === 'Success') {
                 let form = {
                     song_id: res.data.id,
                     lyric: formData.lyric
                 }
-                let reslyrics = post('/lyrics/new', form);
+                console.log(form);
+                let reslyrics = await post('/api/lyrics/new', form);
                 console.log(reslyrics);
             }
             console.log(res);
             handleClose();
         }
+    }
+
+    const getSongTypes = async () => {
+        const songTypes: any = await get('/api/song_type');
+        setSongTypes(songTypes.data);
     }
 
     return (
@@ -72,6 +85,8 @@ export default function FormDialog(props: FormDialogProps) {
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries((formData as any).entries());
+                        formJson.song_type_id = Number(formJson.song_type_id);
+                        console.log(formJson);
                         handleSave(formJson);
                     },
                 }}
@@ -89,6 +104,7 @@ export default function FormDialog(props: FormDialogProps) {
                             type="text"
                             fullWidth
                             variant="standard"
+                            value={form?.name}
                         />
                         <TextField
                             autoFocus
@@ -100,22 +116,26 @@ export default function FormDialog(props: FormDialogProps) {
                             type="text"
                             fullWidth
                             variant="standard"
+                            value={form?.author}
                         />
                         <FormControl variant="standard" required fullWidth sx={{ mt: 1 }}>
                             <InputLabel id="song-type-label">Song Type</InputLabel>
                             <Select
                                 labelId="song-type-label"
-                                id="song-type"
-                                value={age}
+                                id="song_type_id"
+                                name='song_type_id'
+                                value={form?.song_type_id.toString()}
                                 onChange={handleChange}
                                 label="Song Type"
                             >
                                 <MenuItem value="">
                                     <em>None</em>
                                 </MenuItem>
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                                {
+                                    songTypes.map((songType: any) => {
+                                        return <MenuItem key={songType.id} value={songType.id}>{songType.name}</MenuItem>
+                                    })
+                                }
                             </Select>
                         </FormControl>
                         <TextField
@@ -128,14 +148,19 @@ export default function FormDialog(props: FormDialogProps) {
                             type="text"
                             fullWidth
                             variant="standard"
+                            value={form?.singer}
                         />
                         <TextField
                             fullWidth
                             required
+                            margin="dense"
+                            type="text"
                             id="lyric"
                             label="Lyric"
+                            name="lyric"
                             multiline
                             variant="standard"
+                            value={form?.lyric}
                         />
                     </div>
 
