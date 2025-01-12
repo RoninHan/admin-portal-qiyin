@@ -3,14 +3,15 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { MainLayout } from './components/Layout/MainLayout';
 import { Login } from './pages/Login';
-import { authStore } from './stores/authStore';
 import UserPage from './pages/user/page';
 import SongTypePage from './pages/songType/page';
 import SettingPage from './pages/setting/page';
 import SongPage from './pages/song/page';
+import { isAuthenticated } from './http/index';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  if (!authStore.isAuthenticated) {
+  let isAuth = isAuthenticated()
+  if (!isAuth) {
     return <Navigate to="/login" />;
   }
   return <>{children}</>;

@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx';
+import { post, setToken } from '../http';
 
 class AuthStore {
   isAuthenticated = false;
@@ -8,11 +9,15 @@ class AuthStore {
     makeAutoObservable(this);
   }
 
-  login = (username: string, password: string) => {
+  login = async (email: string, password: string) => {
     // In a real app, you would make an API call here
-    if (username && password) {
-      this.isAuthenticated = true;
-      this.user = { username };
+    if (email && password) {
+      let result: any = await post('/api/login', { email, password });
+      if (result.status === 'success') {
+        setToken(result.token);
+        this.isAuthenticated = true;
+        this.user = { username: result.username };
+      }
     }
   };
 

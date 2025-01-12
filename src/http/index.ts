@@ -6,8 +6,8 @@ export const http = axios.create({
 
 http.interceptors.request.use((config) => {
     config.headers
-        ? (config.headers["Authorization"] = "Bearer " + localStorage.getItem("token"))
-        : (config.headers = new axios.AxiosHeaders({ Authorization: "Bearer " + localStorage.getItem("token") }));
+        ? (config.headers["Authorization"] = "Bearer " + localStorage.getItem("qiyin-token"))
+        : (config.headers = new axios.AxiosHeaders({ Authorization: "Bearer " + localStorage.getItem("qiyin-token") }));
     return config;
 }
 );
@@ -16,7 +16,7 @@ http.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response.status === 401) {
-            localStorage.removeItem("token");
+            localStorage.removeItem("qiyin-token");
             window.location.href = "/login";
         }
         return Promise.reject(error);
@@ -46,19 +46,19 @@ export const post = (url: any, data: Object) => {
 }
 
 export const setToken = (token: string) => {
-    localStorage.setItem("token", token);
+    localStorage.setItem("qiyin-token", token);
 }
 
 export const removeToken = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("qiyin-token");
 }
 
 export const getToken = () => {
-    return localStorage.getItem("token");
+    return localStorage.getItem("qiyin-token");
 }
 
 export const isAuthenticated = () => {
-    return !!localStorage.getItem("token");
+    return !!localStorage.getItem("qiyin-token");
 }
 
 export const logout = () => {

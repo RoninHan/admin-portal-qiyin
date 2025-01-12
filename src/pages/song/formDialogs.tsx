@@ -124,7 +124,7 @@ export default function FormDialog(props: FormDialogProps) {
                                 labelId="song-type-label"
                                 id="song_type_id"
                                 name='song_type_id'
-                                value={form?.song_type_id.toString()}
+                                value={form?.song_type_id}
                                 onChange={handleChange}
                                 label="Song Type"
                             >

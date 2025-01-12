@@ -12,13 +12,13 @@ import {
 import { authStore } from '../stores/authStore';
 
 export const Login = observer(() => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    authStore.login(username, password);
+    authStore.login(email, password);
     if (authStore.isAuthenticated) {
       navigate('/dashboard');
     }
@@ -36,9 +36,9 @@ export const Login = observer(() => {
           <form onSubmit={handleLogin} className="space-y-4">
             <TextField
               fullWidth
-              label="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              label="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
             <TextField
