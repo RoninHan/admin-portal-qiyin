@@ -3,6 +3,7 @@ import { Avatar, IconButton, Menu, MenuItem, ListItemIcon, ListItemText } from '
 import { Settings, LogOut } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { authStore } from '../../../stores/authStore';
+import { logoutToLogin } from '../../../http';
 
 export const ProfileMenu: React.FC = () => {
   const { t } = useTranslation();
@@ -18,6 +19,7 @@ export const ProfileMenu: React.FC = () => {
 
   const handleLogout = () => {
     authStore.logout();
+    logoutToLogin();
     handleClose();
   };
 
@@ -28,7 +30,7 @@ export const ProfileMenu: React.FC = () => {
         size="small"
         className="ml-2"
       >
-        <Avatar 
+        <Avatar
           sx={{ width: 32, height: 32 }}
           src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
         />

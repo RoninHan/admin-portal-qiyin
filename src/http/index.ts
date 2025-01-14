@@ -25,7 +25,7 @@ http.interceptors.response.use(
 
 export const get = (url: any, params?: Object) => {
     return new Promise((resolve, reject) => {
-        axios.get(url, {
+        http.get(url, {
             params: params,
         }).then((response) => {
             resolve(response.data);
@@ -37,7 +37,7 @@ export const get = (url: any, params?: Object) => {
 
 export const post = (url: any, data: Object) => {
     return new Promise((resolve, reject) => {
-        axios.post(url, data).then((response) => {
+        http.post(url, data).then((response) => {
             resolve(response.data);
         }).catch((error) => {
             reject(error);
@@ -61,7 +61,7 @@ export const isAuthenticated = () => {
     return !!localStorage.getItem("qiyin-token");
 }
 
-export const logout = () => {
+export const logoutToLogin = () => {
     removeToken();
     window.location.href = "/login";
 }

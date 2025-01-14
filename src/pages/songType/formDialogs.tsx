@@ -72,6 +72,18 @@ export default function FormDialog(props: FormDialogProps) {
                             variant="standard"
                             value={form?.name}
                         />
+                        <TextField
+                            autoFocus
+                            required
+                            margin="dense"
+                            id="en_name"
+                            name="en_name"
+                            label="Song type english name"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            value={form?.en_name}
+                        />
                     </div>
 
                 </DialogContent>
