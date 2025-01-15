@@ -17,7 +17,9 @@ class AuthStore {
         setToken(result.token);
         this.isAuthenticated = true;
         this.user = { username: result.username };
+        return true
       }
+      return false
     }
   };
 

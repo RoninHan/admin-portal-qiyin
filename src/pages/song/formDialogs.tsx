@@ -35,38 +35,29 @@ export default function FormDialog(props: FormDialogProps) {
     };
 
     const handleChange = (event: SelectChangeEvent) => {
-        setAge(event.target.value);
+        const value = event.target.value;
+        setForm({
+            ...form,
+            song_type_id: value
+        });
     };
 
     const handleSave = async (formData: any) => {
+        console.log(formData);
         if (form.id) {
             let res: any = await post('/api/song/update/' + form.id, formData);
             console.log(res);
-            if (res.status === "Success") {
-                console.log(123)
-                let form = {
-                    song_id: res.data.id,
-                    lyric: formData.lyric
-                }
-                let reslyrics = await post('/api/lyrics/update/' + res.data.id, form);
-                console.log(reslyrics);
+            if (res.status === "success") {
+                handleClose();
             }
-            handleClose();
+            
         } else {
             let res: any = await post('/api/song/new', formData);
-            debugger
             if (res.status === 'Success') {
-                let form = {
-                    song_id: res.data.id,
-                    lyric: formData.lyric
-                }
-                console.log(form);
-                let reslyrics = await post('/api/lyrics/new', form);
-                console.log(reslyrics);
+                handleClose();
             }
-            console.log(res);
-            handleClose();
         }
+        
     }
 
     const getSongTypes = async () => {
@@ -104,7 +95,7 @@ export default function FormDialog(props: FormDialogProps) {
                             type="text"
                             fullWidth
                             variant="standard"
-                            value={form?.name}
+                            defaultValue={form?.name}
                         />
                         <TextField
                             autoFocus
@@ -116,7 +107,7 @@ export default function FormDialog(props: FormDialogProps) {
                             type="text"
                             fullWidth
                             variant="standard"
-                            value={form?.author}
+                            defaultValue={form?.author}
                         />
                         <FormControl variant="standard" required fullWidth sx={{ mt: 1 }}>
                             <InputLabel id="song-type-label">Song Type</InputLabel>
@@ -148,7 +139,7 @@ export default function FormDialog(props: FormDialogProps) {
                             type="text"
                             fullWidth
                             variant="standard"
-                            value={form?.singer}
+                            defaultValue={form?.singer}
                         />
                         <TextField
                             fullWidth
@@ -160,7 +151,7 @@ export default function FormDialog(props: FormDialogProps) {
                             name="lyric"
                             multiline
                             variant="standard"
-                            value={form?.lyric}
+                            defaultValue={form?.lyric}
                         />
                     </div>
 

@@ -70,7 +70,7 @@ export default function FormDialog(props: FormDialogProps) {
                             type="text"
                             fullWidth
                             variant="standard"
-                            value={form?.name}
+                            defaultValue={form?.name}
                         />
                         <TextField
                             autoFocus
@@ -82,7 +82,7 @@ export default function FormDialog(props: FormDialogProps) {
                             type="text"
                             fullWidth
                             variant="standard"
-                            value={form?.en_name}
+                            defaultValue={form?.en_name}
                         />
                     </div>
 

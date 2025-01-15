@@ -4,16 +4,18 @@ import { get, post } from '../../http';
 import { useEffect, useState } from 'react';
 
 const SettingPage = () => {
-    const [setting, setSetting] = useState<any>({});
+    const [form, setForm] = useState<any>({
+        device_id: ''
+    });
 
     const getSetting = async () => {
-        const setting: any = await get('/api/setting');
-        setSetting(setting.data);
+        const res: any = await get('/api/setting');
+        setForm(res.data);
     };
 
     const handleSave = async () => {
-        let res = await post('/api/setting/update/' + setting.id, setting);
-        console.log(res);
+        await post('/api/setting/update/' + form.id, form);
+        await getSetting();
     }
 
     useEffect(() => {
@@ -24,8 +26,8 @@ const SettingPage = () => {
         <div>
             <h1>Setting Page</h1>
             <div className='flex flex-row gap-4 mt-4'>
-                <TextField id="outlined-basic" size='small' label="Device id" variant="outlined" value={setting.device_id} onChange={(e) => {
-                    setSetting({ ...setting, device_id: e.target.value });
+                <TextField autoFocus id="outlined-basic" size='small' label="Device id" variant="outlined" value={form.device_id} onChange={(e) => {
+                    setForm({ ...form, device_id: e.target.value });
                 }} />
                 <Button variant="outlined" onClick={handleSave}>保存</Button>
             </div>

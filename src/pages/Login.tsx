@@ -16,10 +16,10 @@ export const Login = observer(() => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    authStore.login(email, password);
-    if (authStore.isAuthenticated) {
+    let res = await authStore.login(email, password);
+    if (res) {
       navigate('/dashboard');
     }
   };
